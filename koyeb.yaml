@@ -1,0 +1,51 @@
+services:
+  - name: pdf-app-web
+    type: web
+    dockerfile: Dockerfile
+    ports:
+      - port: 8000
+        http:
+          paths:
+            - path: /
+              rewrite: /
+    env:
+      - name: SECRET_KEY
+        secret: true
+      - name: SQLALCHEMY_DATABASE_URI
+        secret: true
+      - name: UPLOAD_URL
+        value: 'https://your-app-name.koyeb.app'
+      - name: REDIS_URI
+        secret: true
+      - name: APP_ENV
+        value: 'production'
+    regions:
+      - fra
+    instance_types:
+      - nano
+    scaling:
+      min_instances: 1
+      max_instances: 3
+
+  - name: pdf-app-worker
+    type: worker
+    dockerfile: Dockerfile
+    command: celery -A app.celery.worker worker --concurrency=1 --loglevel=INFO --pool=solo
+    env:
+      - name: SECRET_KEY
+        secret: true
+      - name: SQLALCHEMY_DATABASE_URI
+        secret: true
+      - name: UPLOAD_URL
+        value: 'https://your-app-name.koyeb.app'
+      - name: REDIS_URI
+        secret: true
+      - name: APP_ENV
+        value: 'production'
+    regions:
+      - fra
+    instance_types:
+      - nano
+    scaling:
+      min_instances: 1
+      max_instances: 2

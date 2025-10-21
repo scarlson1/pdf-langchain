@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - '8000:8000'
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}
+      - UPLOAD_URL=${UPLOAD_URL}
+      - REDIS_URI=redis://redis:6379/0
+      - APP_ENV=production
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - ./instance:/app/instance
+
+  worker:
+    build: .
+    command: celery -A app.celery.worker worker --concurrency=1 --loglevel=INFO --pool=solo
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}
+      - UPLOAD_URL=${UPLOAD_URL}
+      - REDIS_URI=redis://redis:6379/0
+      - APP_ENV=production
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - ./instance:/app/instance
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-pdf_app}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  postgres_data:
