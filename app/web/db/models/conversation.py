@@ -11,10 +11,12 @@ class Conversation(BaseModel):
     memory: str = db.Column(db.String)
     llm: str = db.Column(db.String)
 
-    pdf_id: int = db.Column(db.Integer, db.ForeignKey("pdf.id"), nullable=False)
+    # pdf_id: int = db.Column(db.Integer, db.ForeignKey("pdf.id"), nullable=False)
+    pdf_id: str = db.Column(db.String, db.ForeignKey("pdf.id"), nullable=False)
     pdf = db.relationship("Pdf", back_populates="conversations")
 
-    user_id: int = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    # user_id: int = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id: str = db.Column(db.String, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", back_populates="conversations")
 
     messages = db.relationship(
