@@ -8,7 +8,7 @@ class User(BaseModel):
         db.String(), primary_key=True, default=lambda: str(uuid.uuid4())
     )
     email: str = db.Column(db.String(80), unique=True, nullable=False)
-    password: str = db.Column(db.String(80), nullable=False)
+    password: str = db.Column(db.String(160), nullable=False)
     pdfs = db.relationship("Pdf", back_populates="user")
     conversations = db.relationship("Conversation", back_populates="user")
 
