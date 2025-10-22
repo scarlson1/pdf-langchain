@@ -84,7 +84,7 @@ def handle_file_upload(fn):
     return wrapped
 
 
-def dispose_connections():
+def dispose_connections(exception=None):
     print("disposing DB connections...")
     db.engine.dispose()
 
