@@ -13,8 +13,24 @@ This guide will help you deploy your Flask PDF application to Koyeb.
 Make sure your repository contains all the necessary files:
 
 - `Dockerfile` (already created)
+- `requirements.txt` (already created)
 - `.koyeb.yaml` (already created)
 - `env.example` (reference for environment variables)
+
+### Alternative Dockerfiles
+
+If you encounter issues with the main Dockerfile, you have several alternatives:
+
+- **`Dockerfile.requirements`**: Uses a more traditional approach with `requirements.txt`
+- **`Dockerfile.uv`**: Uses `uv` (fast Python package installer) for faster builds
+- **`Dockerfile.uv-venv`**: Uses `uv` with virtual environment for maximum efficiency
+
+#### Benefits of using uv
+
+- **Faster builds**: uv is significantly faster than pip for dependency resolution and installation
+- **Better caching**: More efficient Docker layer caching
+- **Reliable**: Better dependency resolution and conflict handling
+- **Modern**: Built with Rust for performance and reliability
 
 ## Step 2: Set Up External Services
 
@@ -23,19 +39,19 @@ Make sure your repository contains all the necessary files:
 You'll need a PostgreSQL database. You can use:
 
 - **Koyeb Database**: Create a PostgreSQL database in your Koyeb dashboard
-- **External service**: Use services like Supabase, PlanetScale, or AWS RDS
+- **External service**: Use services like Supabase, PlanetScale, or AWS RDS (using Koyeb)
 
 ### Redis
 
 You'll need a Redis instance for Celery:
 
 - **Koyeb Redis**: Create a Redis instance in your Koyeb dashboard
-- **External service**: Use services like Redis Cloud, AWS ElastiCache, or Upstash
+- **External service**: Use services like Redis Cloud, AWS ElastiCache, or Upstash (using Upstash)
 
 ### Optional Services
 
 - **File Storage**: If you need file storage, consider AWS S3, Cloudinary, or similar
-- **Vector Database**: For embeddings, you might need Pinecone, Weaviate, or similar
+- **Vector Database**: For embeddings, you might need Pinecone, Weaviate, or similar (using Pinecone)
 
 ## Step 3: Configure Environment Variables
 
@@ -147,22 +163,29 @@ After deployment, you need to initialize the database:
 
 ### Common Issues
 
-1. **Database connection errors**:
+1. **Docker build failures**:
+
+   - If you get pipenv errors, try using `Dockerfile.requirements` instead
+   - For faster builds, try `Dockerfile.uv` or `Dockerfile.uv-venv`
+   - Ensure all dependencies are listed in `requirements.txt` or `pyproject.toml`
+   - Check that Node.js installation completed successfully
+
+2. **Database connection errors**:
 
    - Verify your `SQLALCHEMY_DATABASE_URI` is correct
    - Ensure your database is accessible from Koyeb
 
-2. **Redis connection errors**:
+3. **Redis connection errors**:
 
    - Verify your `REDIS_URI` is correct
    - Ensure your Redis instance is accessible
 
-3. **Worker not processing tasks**:
+4. **Worker not processing tasks**:
 
    - Check that the worker service is running
    - Verify Redis connection in worker logs
 
-4. **Static files not loading**:
+5. **Static files not loading**:
    - Ensure the frontend build process completed successfully
    - Check that the `client/build` directory exists in your container
 

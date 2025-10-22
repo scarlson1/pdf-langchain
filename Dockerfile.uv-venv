@@ -15,12 +15,16 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
 
-# Copy requirements file
-COPY requirements.txt ./
+# Install uv
+RUN pip install --no-cache-dir uv
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Copy pyproject.toml for uv to use
+COPY pyproject.toml ./
+
+# Create virtual environment and install dependencies
+RUN uv venv && \
+    . .venv/bin/activate && \
+    uv pip install -e .
 
 # Copy application code
 COPY . .
@@ -40,6 +44,7 @@ EXPOSE 8000
 # Set environment variables
 ENV FLASK_APP=app.web
 ENV PYTHONPATH=/app
+ENV PATH="/app/.venv/bin:$PATH"
 
 # Default command (can be overridden in Koyeb)
 CMD ["flask", "--app", "app.web", "run", "--host", "0.0.0.0", "--port", "8000"]

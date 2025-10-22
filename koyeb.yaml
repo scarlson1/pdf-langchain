@@ -1,7 +1,7 @@
 services:
   - name: pdf-app-web
     type: web
-    dockerfile: Dockerfile
+    dockerfile: Dockerfile.uv-venv
     ports:
       - port: 8000
         http:
@@ -29,7 +29,7 @@ services:
 
   - name: pdf-app-worker
     type: worker
-    dockerfile: Dockerfile
+    dockerfile: Dockerfile.Dockerfile.uv-venv
     command: celery -A app.celery.worker worker --concurrency=1 --loglevel=INFO --pool=solo
     env:
       - name: SECRET_KEY
