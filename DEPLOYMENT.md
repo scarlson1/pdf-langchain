@@ -174,6 +174,7 @@ After deployment, you need to initialize the database:
 
    - Verify your `SQLALCHEMY_DATABASE_URI` is correct
    - Ensure your database is accessible from Koyeb
+   - If you get `ModuleNotFoundError: No module named 'psycopg2'`, ensure `psycopg2-binary` is in your dependencies
 
 3. **Redis connection errors**:
 

@@ -27,5 +27,5 @@ dependencies = [
     "uuid==1.30",
     "watchdog==3.0.0",
     "werkzeug==2.3.1",
-    "psycopg2==2.9.11"
+    "psycopg2-binary==2.9.11"
 ]
