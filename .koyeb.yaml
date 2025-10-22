@@ -14,7 +14,7 @@ services:
       - name: SQLALCHEMY_DATABASE_URI
         secret: true
       - name: UPLOAD_URL
-        value: 'https://your-app-name.koyeb.app'
+        value: 'https://prod-upload-langchain.fly.dev'
       - name: REDIS_URI
         secret: true
       - name: APP_ENV
@@ -37,7 +37,7 @@ services:
       - name: SQLALCHEMY_DATABASE_URI
         secret: true
       - name: UPLOAD_URL
-        value: 'https://your-app-name.koyeb.app'
+        value: 'https://prod-upload-langchain.fly.dev'
       - name: REDIS_URI
         secret: true
       - name: APP_ENV

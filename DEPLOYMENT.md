@@ -127,9 +127,19 @@ AWS_REGION=us-east-1
    koyeb service create --config .koyeb.yaml
    ```
 
-## Step 5: Initialize the Database
+## Step 5: Database Initialization
 
-After deployment, you need to initialize the database:
+The application will automatically initialize database tables on startup. However, if you need to manually manage the database:
+
+### Automatic Initialization (Recommended)
+
+- Tables are created automatically when the application starts
+- Safe for production - won't drop existing data
+- No manual intervention required
+
+### Manual Database Management
+
+If you need to manually manage the database:
 
 1. **Access your web service**:
 
@@ -137,9 +147,14 @@ After deployment, you need to initialize the database:
    - Find your web service
    - Click on "Logs" or "Shell"
 
-2. **Run the database initialization**:
+2. **Available commands**:
+
    ```bash
+   # Initialize tables (safe, won't drop existing data)
    flask --app app.web init-db
+
+   # Reset database (destructive - drops all data)
+   flask --app app.web reset-db
    ```
 
 ## Step 6: Verify Deployment
