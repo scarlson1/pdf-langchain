@@ -6,6 +6,7 @@ import logging
 from flask import g, session, request
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from werkzeug.exceptions import Unauthorized, BadRequest
+from app.web.db import db
 from app.web.db.models import User, Model
 
 
@@ -81,6 +82,11 @@ def handle_file_upload(fn):
             return fn(*args, **kwargs)
 
     return wrapped
+
+
+def dispose_connections():
+    print("disposing DB connections...")
+    db.engine.dispose()
 
 
 def handle_error(err):
