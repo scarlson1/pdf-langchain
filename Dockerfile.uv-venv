@@ -48,4 +48,4 @@ ENV PYTHONPATH=/app
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Default command (can be overridden in Koyeb)
-CMD ["flask", "--app", "app.web", "reset-db", "run", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["flask", "--app", "app.web", "init-db", "run", "--host", "0.0.0.0", "--port", "8000"]
